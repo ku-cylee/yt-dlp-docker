@@ -1,7 +1,7 @@
 FROM python:3.12-slim
 
 LABEL org.opencontainers.image.authors="ku-cylee" \
-      org.opencontainers.image.version="0.2"
+      org.opencontainers.image.version="0.2.1"
 
 ARG USERNAME=yt
 ARG USERGROUP=$USERNAME
@@ -26,13 +26,14 @@ ENV DENO_INSTALL=/usr/local
 RUN apt install --no-install-recommends -y curl unzip && \
     curl -fsSL https://deno.land/install.sh | sh
 
-# User account
+# User account creation, SSH configuration
 RUN useradd -m -s /bin/bash --create-home $USERNAME && \
     usermod -aG sudo $USERNAME && \
     echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
     mkdir /home/$USERNAME/.ssh && \
     chown -R $USERNAME:$USERGROUP /home/$USERNAME/.ssh && \
-    chmod 700 /home/$USERNAME/.ssh
+    chmod 700 /home/$USERNAME/.ssh && \
+    sed -i 's/^#\?PasswordAuthentication .*/PasswordAuthentication no/' /etc/ssh/sshd_config
 
 COPY --chown=$USERNAME:$USERGROUP ./youtube.pub /home/$USERNAME/.ssh/authorized_keys
 

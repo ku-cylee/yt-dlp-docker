@@ -25,7 +25,7 @@ COPY --chown=$USERNAME:$USERGROUP ./youtube.pub /home/$USERNAME/.ssh/authorized_
 docker build \
     --build-arg USERNAME=<username> \
     --build-arg PASSWORD=<password> \
-    -t yt:0.2
+    -t yt:0.2.1
 ```
 
 ## Deploy container
@@ -39,7 +39,7 @@ docker run -d \
     -p <ssh-port>:22 \
     -v <download-dir>:/home/<username>/downloads \
     --name yt \
-    yt:0.2
+    yt:0.2.1
 ```
 
 ## Start and stop container
